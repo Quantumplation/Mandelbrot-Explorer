@@ -1,6 +1,7 @@
 #include <Windows.h>
 
-#include "MandelbrotRenderer.h"
+#include "mandelbrot.h"
+#include "shader.h"
 
 LRESULT CALLBACK WindowProc(
 	HWND hWnd,
@@ -15,22 +16,22 @@ int WINAPI WinMain(
 	int nCmdShow) 
 {
 	HWND hWnd;
-	WNDCLASSEX wc;
+	WNDCLASSEX window_class;
 
-	ZeroMemory(&wc, sizeof(WNDCLASSEX));
+	ZeroMemory(&window_class, sizeof(WNDCLASSEX));
 
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
-    wc.lpszClassName = "MandelbrotWindow";
+    window_class.cbSize = sizeof(WNDCLASSEX);
+    window_class.style = CS_HREDRAW | CS_VREDRAW;
+    window_class.lpfnWndProc = WindowProc;
+    window_class.hInstance = hInstance;
+    window_class.hCursor = LoadCursor(NULL, IDC_ARROW);
+    window_class.hbrBackground = (HBRUSH)COLOR_WINDOW;
+    window_class.lpszClassName = "MandelbrotWindow";
 
-    RegisterClassEx(&wc);
+    RegisterClassEx(&window_class);
 
-	RECT wr = {0, 0, 800, 600};
-	AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
+	RECT window_rect = {0, 0, 800, 600};
+	AdjustWindowRect(&window_rect, WS_OVERLAPPEDWINDOW, FALSE);
 
     hWnd = CreateWindowEx(NULL,
                           "MandelbrotWindow",
@@ -38,8 +39,8 @@ int WINAPI WinMain(
                           WS_OVERLAPPEDWINDOW,
 						  300,
 						  300,
-						  wr.right - wr.left,
-						  wr.bottom - wr.top,
+						  window_rect.right - window_rect.left,
+						  window_rect.bottom - window_rect.top,
 						  NULL,
 						  NULL,
 						  hInstance,
@@ -47,17 +48,19 @@ int WINAPI WinMain(
 
     ShowWindow(hWnd, nCmdShow);
 
-	MSG msg = {0};
+	MSG message = {0};
 
-	CMandelbrot renderer(hWnd);
+	Mandelbrot renderer(hWnd);
+	renderer.RegisterShader("mandelbrot", "H:\\proj\\Mandelbrot\\Mandelbrot\\mandelbrot.hlsl", "VShader",
+		                    "PShader", true);
 
     while(TRUE)
 	{
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if(PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
 		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-			if(msg.message == WM_QUIT)
+			TranslateMessage(&message);
+			DispatchMessage(&message);
+			if(message.message == WM_QUIT)
 				break;
 		}
 		else
@@ -66,7 +69,7 @@ int WINAPI WinMain(
 		}
     }
 
-    return msg.wParam;
+    return message.wParam;
 }
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
