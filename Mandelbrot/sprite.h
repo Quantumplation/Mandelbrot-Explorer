@@ -9,6 +9,7 @@ struct Vertex
 {
 	float X, Y, Z;
 	D3DXCOLOR Color;
+	float U, V;
 };
 
 class Sprite

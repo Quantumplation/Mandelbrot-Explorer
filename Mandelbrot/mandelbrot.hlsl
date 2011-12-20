@@ -1,28 +1,36 @@
+Texture2D gradient;
+SamplerState SampleType;
+
+struct VertexInputType
+{
+	float4 position : POSITION;
+	float4 color : COLOR;
+	float2 tex : TEXCOORD0;
+};
+
 struct VOut
 {
 	float4 position : SV_POSITION;
 	float4 color : COLOR;
+	float2 tex : TEXCOORD0;
 };
 
-VOut VShader(float4 position : POSITION, float4 color : COLOR)
+VOut VShader(VertexInputType input)
 {
 	VOut output;
 
-	output.position = position;
-
-	// Encode the position (between -1 and 1) into the color.
-	output.color.r = (position.x + 1)/2;
-	output.color.g = (position.y + 1)/2;
-	output.color.ba = 0;
+	output.position = input.position;
+	output.tex = input.tex;
+	output.color = input.color;
 
 	return output;
 }
 
-float4 PShader(float4 position : SV_POSITION, float4 color : COLOR) : SV_TARGET
+float4 PShader(VOut input) : SV_TARGET
 {
 	float2 z, c;
-	c.x = color.r * 2 - 1.5;
-	c.y = color.g * 2 - 1;
+	c.x = input.tex.r * 2 - 1.5;
+	c.y = input.tex.g * 2 - 1;
 
 	z = c;
 	float i;
@@ -37,11 +45,12 @@ float4 PShader(float4 position : SV_POSITION, float4 color : COLOR) : SV_TARGET
 
 	float modulus = sqrt(z.x * z.x + z.y * z.y);
 	if(modulus < 20)
-		color.rgb = 0;
+		input.color.rgb = 0;
 	else
 	{
+		// Renormalize for smooth color falloff
 		float mu = (i) - (log(log(modulus))) / log(2);
-		color.rgb = mu / 30;
+		input.color.rgb = gradient.Sample(SampleType, mu/30, 0);
 	}
-	return color;
+	return input.color;
 }

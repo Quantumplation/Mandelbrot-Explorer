@@ -10,13 +10,15 @@ class Shader
 {
 public:
 	Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader_name, 
-		   LPCSTR pixel_shader_name);
+		   LPCSTR pixel_shader_name, LPCSTR texture);
 	~Shader();
 
 	void Activate(ID3D11DeviceContext& device_context);
 private:
 	ID3D11VertexShader *vertex_shader_;
 	ID3D11PixelShader  *pixel_shader_;
+	ID3D11ShaderResourceView* texture_;
+	ID3D11SamplerState* sampler_state_;
 	ID3D11InputLayout *input_layout_;
 };
 

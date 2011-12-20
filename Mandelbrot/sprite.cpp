@@ -4,12 +4,12 @@ Sprite::Sprite(ID3D11Device& device, ID3D11DeviceContext& device_context)
 {
 	Vertex vertex_data[] = 
 	{
-		{1.0f, 1.0f, 0.0f, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f)},
-		{1.0f, -1.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
-		{-1.0f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
-		{-1.0f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
-		{1.0f, -1.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
-		{-1.0f, -1.0f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f)},
+		{1.0f, 1.0f, 0.0f, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f), 1.0f, 1.0f},
+		{1.0f, -1.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0.0f},
+		{-1.0f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f},
+		{-1.0f, 1.0f, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f), 0.0f, 1.0f},
+		{1.0f, -1.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f), 1.0f, 0.0f},
+		{-1.0f, -1.0f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f), 0.0f, 0.0f},
 	};
 
 	D3D11_BUFFER_DESC buffer_description;

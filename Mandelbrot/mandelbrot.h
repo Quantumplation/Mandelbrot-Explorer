@@ -24,7 +24,8 @@ public:
 
 	void CreateShader(const std::string& shader_name, 
 						LPCTSTR file_name, LPCSTR vertex_shader, 
-						LPCSTR pixel_shader, bool activate = false);
+						LPCSTR pixel_shader, LPCSTR texture, 
+						bool activate = false);
 	void SetCurrentShader(const std::string& shader_name);
 	void CreateSprite();
 	void Draw();
