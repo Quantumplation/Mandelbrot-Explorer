@@ -2,5 +2,15 @@
 #####################
 *.sdf
 *.suo
+*.ncb
+*.sbr
+*.*log
 *.vcxproj*
 *.opensdf
+ipch
+
+# Compiled Binaries
+#####################
+[Dd]ebug
+[Rr]elease
+[Oo]bj
