@@ -52,6 +52,12 @@ Mandelbrot::Mandelbrot(HWND hWnd)
 
 Mandelbrot::~Mandelbrot()
 {
+	for(vector<Sprite*>::const_iterator it = sprites_.begin(); 
+		it != sprites_.end(); it++)
+	{
+		delete (*it);
+	}
+
 	for(map<string, Shader*>::const_iterator it = shaders_.begin(); 
 		it != shaders_.end(); it++)
 	{

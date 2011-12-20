@@ -59,6 +59,7 @@ Shader::Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader,
 		sampler_description.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 		sampler_description.MaxLOD = D3D11_FLOAT32_MAX;
 		device.CreateSamplerState(&sampler_description, &sampler_state_);
+		LPVOID a = nullptr;
 	}
 }
 
@@ -68,6 +69,7 @@ Shader::~Shader()
 	if(input_layout_) input_layout_->Release();
 	if(pixel_shader_) pixel_shader_->Release();
 	if(texture_) texture_->Release();
+	if(sampler_state_) sampler_state_->Release();
 }
 
 void Shader::Activate(ID3D11DeviceContext& device_context)

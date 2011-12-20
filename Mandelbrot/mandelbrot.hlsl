@@ -50,7 +50,7 @@ float4 PShader(VOut input) : SV_TARGET
 	{
 		// Renormalize for smooth color falloff
 		float mu = (i) - (log(log(modulus))) / log(2);
-		input.color.rgb = gradient.Sample(SampleType, mu/30, 0);
+		input.color.rgb = gradient.Sample(SampleType, mu/130, 0);
 	}
 	return input.color;
 }
