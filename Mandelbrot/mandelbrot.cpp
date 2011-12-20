@@ -65,11 +65,11 @@ Mandelbrot::~Mandelbrot()
 }
 
 void Mandelbrot::CreateShader(const string& shader_name, LPCTSTR file_name, 
-								LPCSTR vertex_shader, LPCSTR pixel_shader, 
-								bool activate)
+							  LPCSTR vertex_shader, LPCSTR pixel_shader, 
+							  LPCSTR texture, bool activate)
 {
 	shaders_[shader_name] = new Shader(*device_, file_name, vertex_shader, 
-									   pixel_shader);
+									   pixel_shader, texture);
 	if(activate) SetCurrentShader(shader_name);
 }
 

@@ -52,7 +52,7 @@ int WINAPI WinMain(
 
 	Mandelbrot renderer(hWnd);
 	renderer.CreateShader("mandelbrot", "mandelbrot.hlsl", "VShader",
-		                    "PShader", true);
+		                    "PShader", "gradient.png", true);
 	renderer.CreateSprite();
     while(TRUE)
 	{
