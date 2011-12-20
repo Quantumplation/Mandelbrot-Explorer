@@ -85,6 +85,7 @@ void Mandelbrot::SetCurrentShader(const string& shader_name)
 void Mandelbrot::CreateSprite()
 {
 	sprites_.push_back(new Sprite(*device_, *device_context_));
+	sprites_.back()->Activate(*device_context_);
 }
 
 void Mandelbrot::Draw()
@@ -94,7 +95,6 @@ void Mandelbrot::Draw()
 	for(vector<Sprite*>::const_iterator it = sprites_.begin(); 
 		it != sprites_.end(); it++)
 	{
-		(*it)->Activate(*device_context_);
 		(*it)->Draw(*device_context_);
 	}
 

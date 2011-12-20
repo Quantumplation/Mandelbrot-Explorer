@@ -10,7 +10,7 @@ Shader::Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader,
 		ID3D10Blob *error_blob;
 		D3DX11CompileFromFile(file_name, 0, 0, vertex_shader, "vs_4_0", 0, 
 							  0, 0, &vertex_shader_blob, &error_blob, NULL);
-		//char* str = (char*)error_blob->GetBufferPointer();
+//		char* str = (char*)error_blob->GetBufferPointer();
 		HRESULT hr = device.CreateVertexShader(vertex_shader_blob->GetBufferPointer(), 
 								   vertex_shader_blob->GetBufferSize(), NULL,
 								   &vertex_shader_);
