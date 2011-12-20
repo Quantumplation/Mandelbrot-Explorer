@@ -1,6 +1,7 @@
 #include <string>
 #include "mandelbrot.h"
 #include "shader.h"
+#include "sprite.h"
 
 using namespace std;
 
@@ -51,7 +52,8 @@ Mandelbrot::Mandelbrot(HWND hWnd)
 
 Mandelbrot::~Mandelbrot()
 {
-	for(map<string, Shader*>::const_iterator it = shaders_.begin(); it != shaders_.end(); it++)
+	for(map<string, Shader*>::const_iterator it = shaders_.begin(); 
+		it != shaders_.end(); it++)
 	{
 		delete it->second;
 	}
@@ -62,11 +64,13 @@ Mandelbrot::~Mandelbrot()
 	device_context_->Release();
 }
 
-void Mandelbrot::RegisterShader(const string& shader_name, LPCTSTR file_name, LPCSTR vertex_shader, 
-								LPCSTR pixel_shader, bool activate)
+void Mandelbrot::CreateShader(const string& shader_name, LPCTSTR file_name, 
+								LPCSTR vertex_shader, LPCSTR pixel_shader, 
+								bool activate)
 {
-	shaders_[shader_name] = new Shader(*device_, file_name, vertex_shader, pixel_shader);
-	if(activate) shaders_[shader_name]->Activate(*device_context_);
+	shaders_[shader_name] = new Shader(*device_, file_name, vertex_shader, 
+									   pixel_shader);
+	if(activate) SetCurrentShader(shader_name);
 }
 
 void Mandelbrot::SetCurrentShader(const string& shader_name)
@@ -78,9 +82,21 @@ void Mandelbrot::SetCurrentShader(const string& shader_name)
 	}
 }
 
+void Mandelbrot::CreateSprite()
+{
+	sprites_.push_back(new Sprite(*device_, *device_context_));
+}
+
 void Mandelbrot::Draw()
 {
-	device_context_->ClearRenderTargetView(back_buffer_, D3DXCOLOR(0.0f, 0.2f, 0.4f, 1.0f));
+	device_context_->ClearRenderTargetView(back_buffer_, D3DXCOLOR(0,0.2,0.4,1));
+
+	for(vector<Sprite*>::const_iterator it = sprites_.begin(); 
+		it != sprites_.end(); it++)
+	{
+		(*it)->Activate(*device_context_);
+		(*it)->Draw(*device_context_);
+	}
 
 	swap_chain_->Present(0, 0);
 }

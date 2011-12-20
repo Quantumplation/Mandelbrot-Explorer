@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include <map>
+#include <vector>
 #include <string>
 #include <D3D11.h>
 #include <D3Dx11.h>
@@ -13,6 +14,7 @@
 #pragma comment (lib, "d3dx10.lib")
 
 class Shader;
+class Sprite;
 
 class Mandelbrot
 {
@@ -20,10 +22,11 @@ public:
 	Mandelbrot(HWND hWnd);
 	~Mandelbrot();
 
-	void RegisterShader(const std::string& shader_name, 
+	void CreateShader(const std::string& shader_name, 
 						LPCTSTR file_name, LPCSTR vertex_shader, 
 						LPCSTR pixel_shader, bool activate = false);
 	void SetCurrentShader(const std::string& shader_name);
+	void CreateSprite();
 	void Draw();
 
 private:
@@ -32,6 +35,9 @@ private:
 	IDXGISwapChain			*swap_chain_;
 	ID3D11RenderTargetView	*back_buffer_;
 
+	ID3D11InputLayout		*layout_;
+
+	std::vector<Sprite*> sprites_;
 	std::map<std::string, Shader*> shaders_;
 	std::string current_shader_;
 };

@@ -51,9 +51,9 @@ int WINAPI WinMain(
 	MSG message = {0};
 
 	Mandelbrot renderer(hWnd);
-	renderer.RegisterShader("mandelbrot", "H:\\proj\\Mandelbrot\\Mandelbrot\\mandelbrot.hlsl", "VShader",
+	renderer.CreateShader("mandelbrot", "mandelbrot.hlsl", "VShader",
 		                    "PShader", true);
-
+	renderer.CreateSprite();
     while(TRUE)
 	{
 		if(PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
@@ -72,7 +72,8 @@ int WINAPI WinMain(
     return message.wParam;
 }
 
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, 
+						    LPARAM lParam)
 {
     switch(message)
     {
