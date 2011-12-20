@@ -1,0 +1,6 @@
+# Visual Studio Files
+#####################
+*.sdf
+*.suo
+*.vcxproj*
+*.opensdf
