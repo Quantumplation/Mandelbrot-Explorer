@@ -1,6 +1,12 @@
 Texture2D gradient;
 SamplerState SampleType;
 
+cbuffer Mandelbrot
+{
+	float scale;
+	float2 center;
+}
+
 struct VertexInputType
 {
 	float4 position : POSITION;
@@ -29,12 +35,12 @@ VOut VShader(VertexInputType input)
 float4 PShader(VOut input) : SV_TARGET
 {
 	float2 z, c;
-	c.x = input.tex.r * 2 - 1.5;
-	c.y = input.tex.g * 2 - 1;
+	c.x = (input.tex.r * 2 - 1) * scale + center.x;
+	c.y = (input.tex.g * 2 - 1) * scale + center.y;
 
 	z = c;
 	float i;
-	for(i = 0; i<400; i++)
+	for(i = 0; i<500; i++)
 	{
 		float x = (z.x * z.x - z.y * z.y) + c.x;
 		float y = (z.y * z.x + z.x * z.y) + c.y;

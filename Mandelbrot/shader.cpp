@@ -1,8 +1,9 @@
 #include "shader.h"
+#include "shader_parameters.h"
 
 Shader::Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader, 
 			   LPCSTR pixel_shader, LPCSTR texture) 
-			   : vertex_shader_(NULL), pixel_shader_(NULL)
+			   : vertex_shader_(NULL), pixel_shader_(NULL), input_variables_(NULL)
 {
 	if(vertex_shader)
 	{
@@ -16,6 +17,7 @@ Shader::Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader,
 		HRESULT hr = device.CreateVertexShader(vertex_shader_blob->GetBufferPointer(), 
 								   vertex_shader_blob->GetBufferSize(), NULL,
 								   &vertex_shader_);
+
 		
 		D3D11_INPUT_ELEMENT_DESC element_description[] = 
 		{
@@ -31,6 +33,8 @@ Shader::Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader,
 								 vertex_shader_blob->GetBufferPointer(), 
 								 vertex_shader_blob->GetBufferSize(),
 								 &input_layout_);
+		if(error_blob) error_blob->Release();
+		vertex_shader_blob->Release();
 	}
 
 	if(pixel_shader)
@@ -42,6 +46,8 @@ Shader::Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader,
 		device.CreatePixelShader(pixel_shader_blob->GetBufferPointer(),
 								  pixel_shader_blob->GetBufferSize(), NULL,
 								  &pixel_shader_);
+
+		pixel_shader_blob->Release();
 	}
 
 	if(texture)
@@ -59,7 +65,6 @@ Shader::Shader(ID3D11Device& device, LPCTSTR file_name, LPCSTR vertex_shader,
 		sampler_description.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 		sampler_description.MaxLOD = D3D11_FLOAT32_MAX;
 		device.CreateSamplerState(&sampler_description, &sampler_state_);
-		LPVOID a = nullptr;
 	}
 }
 
@@ -70,6 +75,7 @@ Shader::~Shader()
 	if(pixel_shader_) pixel_shader_->Release();
 	if(texture_) texture_->Release();
 	if(sampler_state_) sampler_state_->Release();
+	if(input_variables_) delete input_variables_;
 }
 
 void Shader::Activate(ID3D11DeviceContext& device_context)
@@ -79,4 +85,10 @@ void Shader::Activate(ID3D11DeviceContext& device_context)
 	device_context.IASetInputLayout(input_layout_);
 	device_context.PSSetSamplers(0, 1, &sampler_state_);
 	device_context.PSSetShaderResources(0, 1, &texture_);
+
+	if(input_variables_)
+	{
+		device_context.PSSetConstantBuffers(0, 1, input_variables_->GetBuffer());
+		device_context.VSSetConstantBuffers(0, 1, input_variables_->GetBuffer());
+	}
 }
