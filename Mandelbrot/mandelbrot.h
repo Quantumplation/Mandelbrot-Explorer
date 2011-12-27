@@ -27,6 +27,18 @@ public:
 						LPCSTR pixel_shader, LPCSTR texture, 
 						bool activate = false);
 	void SetCurrentShader(const std::string& shader_name);
+	
+	template<typename T>
+	void SetShaderParameters(const std::string& shader_name, const T& data)
+	{
+		if(shaders_.find(shader_name) != shaders_.end())
+		{
+			shaders_[shader_name]->SetParameters<T>(data, *device_context_);
+			shaders_[shader_name]->Activate(*device_context_);
+		}
+	}
+
+
 	void CreateSprite();
 	void Draw();
 
